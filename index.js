@@ -47,13 +47,29 @@ async function run(){
             res.send(result); 
         })
 
-        
+
+        app.get('/category', async(req, res)=>{
+            const query={}
+            const Cursor=CategoryCollection.find(query)
+            const category=await Cursor.toArray()
+            res.send(category)
+        })
+
+
         const ProductCollection = client.db('CarMarket').collection('Products');
         app.post('/product', async(req, res) => {
             const product = req.body;
             const result= await ProductCollection.insertOne(product)
             res.send(result); 
         })
+
+        app.get('/product', async(req, res)=>{
+            const query={}
+            const Cursor=ProductCollection.find(query)
+            const product=await Cursor.toArray()
+            res.send(product)
+        })
+        
 
 
     
