@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000;
 require('dotenv').config()
@@ -40,6 +40,22 @@ async function run(){
         })
 
 
+        app.get('/users/:id', async(req, res)=>{
+            const id =req.params.id;
+            const serQuery={role:id}
+            const productCursor=userCollection.find(serQuery)
+            const product=await productCursor.toArray()
+            res.send(product)
+        })
+
+        app.delete('/usersDelete/:id',async(req,res)=>{
+            const id =req.params.id;
+            const query ={_id:ObjectId(id)}
+            const result =await userCollection.deleteOne(query)
+            res.send(result)
+        });
+
+
         const CategoryCollection = client.db('CarMarket').collection('category');
         app.post('/category', async(req, res) => {
             const category = req.body;
@@ -77,6 +93,24 @@ async function run(){
             const product=await productCursor.toArray()
             res.send(product)
         })
+
+
+        app.get('/myProduct/:id', async(req, res)=>{
+            const id =req.params.id;
+            const serQuery={email:id}
+            const productCursor=ProductCollection.find(serQuery)
+            const product=await productCursor.toArray()
+            res.send(product)
+           
+        })
+
+        app.delete('/productDelete/:id',async(req,res)=>{
+            const id =req.params.id;
+            const query ={_id:ObjectId(id)}
+            const result =await ProductCollection.deleteOne(query)
+            res.send(result)
+        });
+
     }
     finally{
     
