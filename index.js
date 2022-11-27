@@ -32,12 +32,16 @@ async function run(){
             const UserResult =await userCollection.insertOne(users);
             res.send(UserResult);
         })
+
+
         app.get('/users',async(req,res)=>{
             const users = req.body;
             console.log(users);
-            const UserResult =await userCollection.insertOne(users);
-            res.send(UserResult);
+            const UserResult =await userCollection.find(users);
+            const Result=await UserResult.toArray()
+            res.send(Result)
         })
+
 
 
         app.get('/users/:id', async(req, res)=>{
@@ -47,6 +51,26 @@ async function run(){
             const product=await productCursor.toArray()
             res.send(product)
         })
+
+// 
+app.put('/users/:id', async(req, res)=>{
+    const id =req.params.id;
+    const filter={_id:ObjectId(id)}
+    const user=req.body;
+    
+    const option ={upsert:true}
+    const updateUserStatus={
+        $set:{
+            Status:user.Status,
+        }
+    }
+    const result= await userCollection.updateOne(filter, updateUserStatus, option)
+    res.send(result)
+})
+
+
+
+
 
         app.delete('/usersDelete/:id',async(req,res)=>{
             const id =req.params.id;
@@ -95,6 +119,21 @@ async function run(){
         })
 
 
+        // 
+        app.get('/AdvertisedProduct', async(req, res)=>{
+            const Query={Status:'Advertised'}
+            const productCursor=ProductCollection.find(Query)
+            const product=await productCursor.toArray()
+            res.send(product)
+        })
+        app.get('/showAdvertise', async(req, res)=>{
+            const Query={Status:'request'}
+            const productCursor=ProductCollection.find(Query)
+            const product=await productCursor.toArray()
+            res.send(product)
+        })
+
+
         app.get('/myProduct/:id', async(req, res)=>{
             const id =req.params.id;
             const serQuery={email:id};
@@ -103,6 +142,24 @@ async function run(){
             res.send(product);
            
         })
+
+
+        app.put('/updateProduct/:id', async(req, res)=>{
+            const id =req.params.id;
+            const filter={_id:ObjectId(id)}
+            const product=req.body;
+            
+            const option ={upsert:true}
+            const updateProductStatus={
+                $set:{
+                    Status:product.Status,
+                }
+            }
+            const result= await ProductCollection.updateOne(filter, updateProductStatus, option)
+            res.send(result)
+        })
+
+
 
         app.delete('/productDelete/:id',async(req,res)=>{
             const id =req.params.id;
