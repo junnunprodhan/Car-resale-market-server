@@ -97,18 +97,50 @@ async function run(){
 
         app.get('/myProduct/:id', async(req, res)=>{
             const id =req.params.id;
-            const serQuery={email:id}
-            const productCursor=ProductCollection.find(serQuery)
-            const product=await productCursor.toArray()
-            res.send(product)
+            const serQuery={email:id};
+            const productCursor=ProductCollection.find(serQuery);
+            const product=await productCursor.toArray();
+            res.send(product);
            
         })
 
         app.delete('/productDelete/:id',async(req,res)=>{
             const id =req.params.id;
-            const query ={_id:ObjectId(id)}
-            const result =await ProductCollection.deleteOne(query)
-            res.send(result)
+            const query ={_id:ObjectId(id)};
+            const result =await ProductCollection.deleteOne(query);
+            res.send(result);
+        });
+
+        const BookingCollection = client.db('CarMarket').collection('Booking');
+        
+        app.get('/booking/:id', async(req, res)=>{
+            const id =req.params.id;
+            const serQuery={userEmail:id};
+            const bookCursor=BookingCollection.find(serQuery);
+            const myBook=await bookCursor.toArray();
+            res.send(myBook);
+           
+        })
+        app.get('/myBuyer/:id', async(req, res)=>{
+            const id =req.params.id;
+            const serQuery={sellerEmail:id};
+            const Cursor=BookingCollection.find(serQuery);
+            const myBuyer=await Cursor.toArray();
+            res.send(myBuyer);
+           
+        })
+        
+        app.post('/booking', async(req, res) => {
+            const bookedProduct = req.body;
+            const result= await BookingCollection.insertOne(bookedProduct);
+            res.send(result); 
+        })
+
+        app.delete('/bookingDelete/:id',async(req,res)=>{
+            const id =req.params.id;
+            const query ={_id:ObjectId(id)};
+            const result =await BookingCollection.deleteOne(query);
+            res.send(result);
         });
 
     }
