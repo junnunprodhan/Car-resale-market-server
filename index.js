@@ -43,6 +43,14 @@ async function run(){
         })
 
 
+        app.get('/users/admin/:email',async(req,res)=>{
+            const email=req.params.email;
+            const query ={email};
+            const user=await userCollection.findOne(query);
+            res.send({isAdmin:user.role == 'Admin'})
+        })
+
+
 
         app.get('/users/:id', async(req, res)=>{
             const id =req.params.id;
@@ -112,25 +120,26 @@ app.put('/users/:id', async(req, res)=>{
 
         app.get('/product/:id', async(req, res)=>{
             const id =req.params.id;
-            const serQuery={category:id}
-            const productCursor=ProductCollection.find(serQuery)
-            const product=await productCursor.toArray()
-            res.send(product)
+            const serQuery={category:id};
+            const productCursor=ProductCollection.find(serQuery);
+            const product=await productCursor.toArray();
+            res.send(product);
         })
 
 
         // 
         app.get('/AdvertisedProduct', async(req, res)=>{
-            const Query={Status:'Advertised'}
-            const productCursor=ProductCollection.find(Query)
-            const product=await productCursor.toArray()
-            res.send(product)
+            const Query={Status:'Advertised'};
+            const productCursor=ProductCollection.find(Query);
+            const product=await productCursor.toArray();
+            console.log(product)
+            res.send(product);
         })
         app.get('/showAdvertise', async(req, res)=>{
-            const Query={Status:'request'}
-            const productCursor=ProductCollection.find(Query)
-            const product=await productCursor.toArray()
-            res.send(product)
+            const Query={Status:'request'};
+            const productCursor=ProductCollection.find(Query);
+            const product=await productCursor.toArray();
+            res.send(product);
         })
 
 
